@@ -21,7 +21,7 @@
             watcher.Renamed += OnRenamed;
             watcher.Error += OnError;
 
-            watcher.Filter = "*.txt|*.doc";
+            watcher.Filter = "*.txt|*.csv";
             watcher.IncludeSubdirectories = true;
             watcher.EnableRaisingEvents = true;
 
