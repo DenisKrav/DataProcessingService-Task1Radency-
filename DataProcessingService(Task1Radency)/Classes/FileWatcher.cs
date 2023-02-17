@@ -9,11 +9,16 @@ namespace DataProcessingService_Task1Radency_.Classes
 {
     internal class FileWatcher
     {
+        //Створення та ініціалізація об'єкту класу FileSystemWatcher, який відповідає за відстеження за файлами
+        //одного певного типу, у заданій папці
         private FileSystemWatcher watcher = new FileSystemWatcher(ConfigurationManager.AppSettings.Get("FolderAPath"));
 
         public void LookFile(string filterFile)
         {
-            watcher.NotifyFilter = NotifyFilters.Attributes
+            try
+            {
+                //Задаємо, які саме зміни будуть відстежуватись у файлі або папці
+                watcher.NotifyFilter = NotifyFilters.Attributes
                                      | NotifyFilters.CreationTime
                                      | NotifyFilters.DirectoryName
                                      | NotifyFilters.FileName
@@ -22,12 +27,29 @@ namespace DataProcessingService_Task1Radency_.Classes
                                      | NotifyFilters.Security
                                      | NotifyFilters.Size;
 
-            watcher.Created += OnCreated;
-            watcher.Error += OnError;
+                //Підписуємося на події, які виникають при ти чи інших подіях, наприклад при видалені файлу, доданні,
+                //перейменуванні і так далі, а також присвоюємо їм метди, які будуть виконуватися при цих подіях.
+                watcher.Created += OnCreated;
+                watcher.Error += OnError;
 
-            watcher.Filter = filterFile;
-            watcher.IncludeSubdirectories = true;
-            watcher.EnableRaisingEvents = true;
+                //ЗАдаємо, який саме тип файлу буде відстежуватись
+                watcher.Filter = filterFile;
+                watcher.IncludeSubdirectories = true;
+                //Задаємо для об'єкта класу FileSystemWatcher, що треба відстежувати компонент за вказаним шляхом,
+                //якщо цього не вказати або або поставити false, то відстеження за вказаним шляхом не буде.
+                watcher.EnableRaisingEvents = true;
+            }
+            //Обробка помилок які виникають, якщо файл конфігурації порожній або не доступний
+            catch (ConfigurationErrorsException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
         }
 
 
