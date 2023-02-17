@@ -1,72 +1,26 @@
-﻿namespace DataProcessingService_Task1Radency_
+﻿using System.Configuration;
+using System.Collections.Specialized;
+using System.Xml;
+using DataProcessingService_Task1Radency_.Classes;
+
+namespace DataProcessingService_Task1Radency_
 {
     internal class Program
     {
         static void Main()
         {
-            using var watcher = new FileSystemWatcher(@"C:\Проэкты (програмирование)\C#\Свои проекты\DataProcessingService(Task1Radency)\FolderA");
 
-            watcher.NotifyFilter = NotifyFilters.Attributes
-                                 | NotifyFilters.CreationTime
-                                 | NotifyFilters.DirectoryName
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.Security
-                                 | NotifyFilters.Size;
+            FileWatcher fw1 = new FileWatcher();
+            FileWatcher fw2 = new FileWatcher();
 
-            watcher.Changed += OnChanged;
-            watcher.Created += OnCreated;
-            watcher.Deleted += OnDeleted;
-            watcher.Renamed += OnRenamed;
-            watcher.Error += OnError;
-
-            watcher.Filter = "*.txt|*.csv";
-            watcher.IncludeSubdirectories = true;
-            watcher.EnableRaisingEvents = true;
+            fw1.LookFile("*.txt");
+            fw2.LookFile("*.csv");
+            
 
             Console.WriteLine("Press enter to exit.");
             Console.ReadLine();
         }
 
-        private static void OnChanged(object sender, FileSystemEventArgs e)
-        {
-            if (e.ChangeType != WatcherChangeTypes.Changed)
-            {
-                return;
-            }
-            Console.WriteLine($"Changed: {e.FullPath}");
-        }
-
-        private static void OnCreated(object sender, FileSystemEventArgs e)
-        {
-            string value = $"Created: {e.FullPath}";
-            Console.WriteLine(value);
-        }
-
-        private static void OnDeleted(object sender, FileSystemEventArgs e) =>
-            Console.WriteLine($"Deleted: {e.FullPath}");
-
-        private static void OnRenamed(object sender, RenamedEventArgs e)
-        {
-            Console.WriteLine($"Renamed:");
-            Console.WriteLine($"    Old: {e.OldFullPath}");
-            Console.WriteLine($"    New: {e.FullPath}");
-        }
-
-        private static void OnError(object sender, ErrorEventArgs e) =>
-            PrintException(e.GetException());
-
-        private static void PrintException(Exception? ex)
-        {
-            if (ex != null)
-            {
-                Console.WriteLine($"Message: {ex.Message}");
-                Console.WriteLine("Stacktrace:");
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine();
-                PrintException(ex.InnerException);
-            }
-        }
+        
     }
 }
