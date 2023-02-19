@@ -16,15 +16,19 @@ namespace DataProcessingService_Task1Radency_
         //Блок коду з міткою Reset, до якого можна буде звернутися за допомогою оператора goto
         Reset:
             {
+                //Встановлюємо таймер, який буде генерувати файл meta.log, а також буде створювати нові папки з датами
+                CreatorDirectories.SetupTimer();
+
+                //Запускаємо стеження за двома видами файлів txt та csv
                 Console.WriteLine("Program start:");
                 FileWatcher fw1 = new FileWatcher();
                 FileWatcher fw2 = new FileWatcher();
-
                 fw1.LookFile("*.txt");
                 fw2.LookFile("*.csv");
 
                 status = "";
             }
+
 
 
             //Лічильник, який відповідає за вивідає за вивід повідомлення: "Invalid command.".
@@ -43,8 +47,6 @@ namespace DataProcessingService_Task1Radency_
             }
             while (status != "reset" && status != "stop");
             countIncComand = 0;
-
-
             //При команді reset спрацьовує оператор goto, який вертає на те місце, де є та мітка,
             //яка зазначена після оператора.
             if (status == "reset")

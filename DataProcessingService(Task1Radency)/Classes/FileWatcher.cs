@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace DataProcessingService_Task1Radency_.Classes
 {
@@ -57,20 +58,46 @@ namespace DataProcessingService_Task1Radency_.Classes
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
             string value = $"Created: {e.FullPath}";
-
-            //using (StreamReader sr = new StreamReader($"{e.FullPath}"))
-            //{
-            //    string line;
-            //    // Read and display lines from the file until the end of
-            //    // the file is reached.
-            //    while ((line = sr.ReadLine()) != null)
-            //    {
-            //        Console.WriteLine(line);
-            //    }
-            //}
-
             Console.WriteLine(value);
+
+            // Створюємо таймер
+            System.Timers.Timer timer = new System.Timers.Timer();
+
+            // Встановлюємо час, коли таймер повинен спрацювати
+            DateTime targetTime;
+            //Якщо поточний час дорівнює опівночі, то встановлюємо таймер на опівніч наступного дня, тому додаэмо день
+            if (DateTime.Now.TimeOfDay == TimeSpan.Zero)
+            {
+                targetTime = DateTime.Today.AddDays(1);
+            }
+            //Інакше встановлюємо таймер на опівніч цього дня, і тому к поточній даті додаємо 24, щоб вийшла опівніч цього дня
+            else
+            {
+                targetTime = DateTime.Today.AddHours(24);
+            }
+
+            TimeSpan timeUntilTarget = targetTime - DateTime.Now;
+
+            // Встановлюємо інтервал таймера
+            timer.Interval = timeUntilTarget.TotalMilliseconds;
+
+
+            // Встановлюємо обробник події для таймера
+            timer.Elapsed += Timer_Elapsed;
+
+            // Запускаємо таймер
+            timer.Start();
+
+
         }
+
+        static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Таймер спрацював о 24:00!");
+        }
+
+
+
 
         private static void OnError(object sender, ErrorEventArgs e) =>
             PrintException(e.GetException());
