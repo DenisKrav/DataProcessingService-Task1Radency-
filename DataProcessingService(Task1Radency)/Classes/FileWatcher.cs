@@ -31,7 +31,6 @@ namespace DataProcessingService_Task1Radency_.Classes
                 //Підписуємося на події, які виникають при ти чи інших подіях, наприклад при видалені файлу, доданні,
                 //перейменуванні і так далі, а також присвоюємо їм метди, які будуть виконуватися при цих подіях.
                 watcher.Created += OnCreated;
-                watcher.Error += OnError;
 
                 //ЗАдаємо, який саме тип файлу буде відстежуватись
                 watcher.Filter = filterFile;
@@ -57,62 +56,15 @@ namespace DataProcessingService_Task1Radency_.Classes
 
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
+            //////
             string value = $"Created: {e.FullPath}";
             Console.WriteLine(value);
+            /////
 
-            // Створюємо таймер
-            System.Timers.Timer timer = new System.Timers.Timer();
+            TXTReader tXTReader = new TXTReader();
+            tXTReader.ReadFile(e.FullPath);
 
-            // Встановлюємо час, коли таймер повинен спрацювати
-            DateTime targetTime;
-            //Якщо поточний час дорівнює опівночі, то встановлюємо таймер на опівніч наступного дня, тому додаэмо день
-            if (DateTime.Now.TimeOfDay == TimeSpan.Zero)
-            {
-                targetTime = DateTime.Today.AddDays(1);
-            }
-            //Інакше встановлюємо таймер на опівніч цього дня, і тому к поточній даті додаємо 24, щоб вийшла опівніч цього дня
-            else
-            {
-                targetTime = DateTime.Today.AddHours(24);
-            }
-
-            TimeSpan timeUntilTarget = targetTime - DateTime.Now;
-
-            // Встановлюємо інтервал таймера
-            timer.Interval = timeUntilTarget.TotalMilliseconds;
-
-
-            // Встановлюємо обробник події для таймера
-            timer.Elapsed += Timer_Elapsed;
-
-            // Запускаємо таймер
-            timer.Start();
-
-
+            MetaFileData.AddParsed_files();
         }
-
-        static void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Console.WriteLine("Таймер спрацював о 24:00!");
-        }
-
-
-
-
-        private static void OnError(object sender, ErrorEventArgs e) =>
-            PrintException(e.GetException());
-
-        private static void PrintException(Exception? ex)
-        {
-            if (ex != null)
-            {
-                Console.WriteLine($"Message: {ex.Message}");
-                Console.WriteLine("Stacktrace:");
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine();
-                PrintException(ex.InnerException);
-            }
-        }
-
     }
 }
