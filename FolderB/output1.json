@@ -3,18 +3,6 @@
     "Name": "Lviv",
     "Services": [
       {
-        "Name": "Water",
-        "Payers": [
-          {
-            "Name": "John Doe",
-            "Payment": 500.0,
-            "Date": "2022-01-27T00:00:00",
-            "Account_number": 1234567
-          }
-        ],
-        "Total": 500.0
-      },
-      {
         "Name": "Heat",
         "Payers": [
           {
@@ -27,6 +15,6 @@
         "Total": 720.0
       }
     ],
-    "Total": 1220.0
+    "Total": 720.0
   }
 ]

@@ -61,8 +61,18 @@ namespace DataProcessingService_Task1Radency_.Classes
             Console.WriteLine(value);
             /////
 
-            TXTReader tXTReader = new TXTReader();
-            tXTReader.ReadFile(e.FullPath);
+            string typeFile = e.FullPath.Substring(e.FullPath.LastIndexOf("."), 4);
+
+            if (typeFile == ".txt")
+            {
+                TXTReader txtReader = new TXTReader();
+                txtReader.ReadFile(e.FullPath);
+            }
+            if (typeFile == ".csv")
+            {
+                CSVReader csvReader = new CSVReader();
+                csvReader.ReadFile(e.FullPath);
+            }
 
             MetaFileData.AddParsed_files();
         }
