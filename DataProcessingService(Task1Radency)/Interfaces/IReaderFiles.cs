@@ -9,7 +9,7 @@ namespace DataProcessingService_Task1Radency_.Interfaces
 {
     internal interface IReaderFiles
     {
-        void /*Task<string>*/ ReadFile(string pathFile);
+        void ReadFile(string pathFile);
 
         bool StringCheck(string str);
 

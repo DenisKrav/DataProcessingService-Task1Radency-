@@ -21,44 +21,55 @@ namespace DataProcessingService_Task1Radency_.Classes
 
         private List<City> cities = new List<City>();
 
-        public async void /*Task<string>*/ ReadFile(string pathFile)
+        public async void ReadFile(string pathFile)
         {
             int countErrors = 0;
 
-            using (StreamReader reader = new StreamReader(pathFile, detectEncodingFromByteOrderMarks: true))
+            // Відловлюємо помилки, які виникають, коли намагаємся зчитати файл, який використовується іншим процесом.
+            // може виникнути при копіюванні файл і вставлянні його в ту ж саму папку без зміни.
+            // Можна буде вирішити за допомогою ШАБЛОНА ПОВТОРНОЇ СПРОБИ.
+            try
             {
-                string? line;
-                while ((line = await reader.ReadLineAsync()) != null)
+                using (StreamReader reader = new StreamReader(pathFile, detectEncodingFromByteOrderMarks: true))
                 {
-                    if (StringCheck(line))
+                    string? line;
+                    while ((line = await reader.ReadLineAsync()) != null)
                     {
-                        // Оброблюємо рядок
-                        LineProcessing(line);
-
-                        // Збільшуємо лічильник перевірених рядків
-                        MetaFileData.AddParsed_lines();
-                    }
-                    else
-                    {
-                        countErrors++;
-
-                        // Якщо помилка зустрілася перший раз, то ми заносимо щлях файлу до списку файлів з помилками, але лише один раз,
-                        // для цього потрібен лічильник, якщо помилки зустрічаються і надалі, то ми більше не заносимо шлях, а просто
-                        // рахуємо далі, скільки рядків з помилками і скільки було проаналізовано рядків.
-                        if (countErrors == 1)
+                        if (StringCheck(line))
                         {
-                            MetaFileData.AddInvalid_files(pathFile);                          
-                        }
+                            // Оброблюємо рядок
+                            LineProcessing(line);
 
-                        // Збільшуємо лічильник перевірених рядків та знайдених помилок
-                        MetaFileData.AddParsed_lines();
-                        MetaFileData.AddFound_errors();
+                            // Збільшуємо лічильник перевірених рядків
+                            MetaFileData.AddParsed_lines();
+                        }
+                        else
+                        {
+                            countErrors++;
+
+                            // Якщо помилка зустрілася перший раз, то ми заносимо щлях файлу до списку файлів з
+                            // помилками, але лише один раз, для цього потрібен лічильник, якщо помилки зустрічаються
+                            // і надалі, то ми більше не заносимо шлях, а просто рахуємо далі, скільки рядків з помилками
+                            // і скільки було проаналізовано рядків.
+                            if (countErrors == 1)
+                            {
+                                MetaFileData.AddInvalid_files(pathFile);
+                            }
+
+                            // Збільшуємо лічильник перевірених рядків та знайдених помилок
+                            MetaFileData.AddParsed_lines();
+                            MetaFileData.AddFound_errors();
+                        }
                     }
                 }
-            }
 
-            // Зберігаємо файл у форматі JSON
-            SeveJSON(cities);
+                // Зберігаємо файл у форматі JSON
+                SeveJSON(cities);
+            }
+            catch(System.IO.IOException ex) 
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         // Метод перевірки валідності рядка
@@ -94,22 +105,26 @@ namespace DataProcessingService_Task1Radency_.Classes
                         {
                             service.Payers.Add(payer);
                             
-                            service.Total++;                          
+                            service.Total++;
+                            citi.Total += payer.Payment;
                         }                      
                     }
                         
                     if (!citi.Services.Any() || !citi.Services.Any(n => n.Name == words[9]))
                     {                         
                         citi.Services.Add(new Service(words[9], new List<Payer>() { payer }));
-                        //citi.Services[citi.Services.FindIndex(n => n.Name == words[2])].Total++;
+
+                        citi.Services[citi.Services.FindIndex(n => n.Name == words[9])].Total += payer.Payment;
+                        cities[cities.FindIndex(n => n.Name == words[2])].Total += payer.Payment;
                     }                    
                 }              
             }               
             if (!cities.Any() || !cities.Any(n => n.Name == words[2]))                
             {                 
                 cities.Add(new City(words[2], new List<Service>() { new Service(words[9], new List<Payer>() { payer }) }));
-                //cities[cities.FindIndex(n => n.Name == words[2])].Services[0].Total++;
-                //cities[cities.FindIndex(n => n.Name == words[2])].Services[0].Total++;
+
+                cities[cities.FindIndex(n => n.Name == words[2])].Services[0].Total += payer.Payment;
+                cities[cities.FindIndex(n => n.Name == words[2])].Total += payer.Payment;
             }
         }
 

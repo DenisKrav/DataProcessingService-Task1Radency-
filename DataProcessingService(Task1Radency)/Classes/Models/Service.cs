@@ -11,7 +11,7 @@ namespace DataProcessingService_Task1Radency_.Classes.Models
     {
         public string Name { get; set; }
         public List<Payer> Payers { get; set; }
-        public int Total { get; set; } = 0;
+        public double Total { get; set; } = 0;
 
         public Service(string name, List<Payer> payers) 
         {

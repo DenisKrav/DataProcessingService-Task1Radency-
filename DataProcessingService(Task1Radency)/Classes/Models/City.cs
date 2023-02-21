@@ -11,7 +11,7 @@ namespace DataProcessingService_Task1Radency_.Classes.Models
     {
         public string Name { get; set; }
         public List<Service> Services { get; set; }
-        public int Total { get; set; } = 0;
+        public double Total { get; set; } = 0;
 
         public City(string name, List<Service> services)
         {
