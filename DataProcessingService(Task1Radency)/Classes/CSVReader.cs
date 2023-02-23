@@ -130,7 +130,7 @@ namespace DataProcessingService_Task1Radency_.Classes
             // Формує рядок формту JSON
             string json = JsonConvert.SerializeObject(cities, Formatting.Indented);
             // Записуємо у файл
-            File.WriteAllTextAsync(ConfigurationManager.AppSettings.Get("FolderBPath") + $"/output{MetaFileData.Parsed_files}.json", json);
+            File.WriteAllTextAsync(CreatorDirectories.FolderPath + $"/output{MetaFileData.Parsed_files}.json", json);
             // Очищуємо масив cities
             cities.Clear();
         }
