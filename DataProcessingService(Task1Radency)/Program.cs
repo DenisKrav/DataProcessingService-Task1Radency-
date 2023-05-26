@@ -31,7 +31,7 @@ namespace DataProcessingService_Task1Radency_
 
 
 
-            //Лічильник, який відповідає за вивідає за вивід повідомлення: "Invalid command.".
+            //Лічильник, який відповідає за вивід повідомлення: "Invalid command.".
             int countIncComand = 0;
             //Цикл зчитування, поки не буде введено вірну команду
             do

@@ -14,6 +14,7 @@ namespace DataProcessingService_Task1Radency_.Classes
         //одного певного типу, у заданій папці
         private FileSystemWatcher watcher = new FileSystemWatcher(ConfigurationManager.AppSettings.Get("FolderAPath"));
 
+        //Метод для моніторингу файлів у папці
         public void LookFile(string filterFile)
         {
             try
@@ -53,7 +54,7 @@ namespace DataProcessingService_Task1Radency_.Classes
         }
 
 
-
+        // Метод, який відслідковує створення нових файлів
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
             //////
@@ -76,5 +77,7 @@ namespace DataProcessingService_Task1Radency_.Classes
 
             MetaFileData.AddParsed_files();
         }
+
+
     }
 }
