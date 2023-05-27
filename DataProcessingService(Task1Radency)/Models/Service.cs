@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataProcessingService_Task1Radency_.Classes.Models
+namespace DataProcessingService_Task1Radency_.Models
 {
     //Клас сервіса, який призначений для проботи з json
     internal class Service
@@ -13,7 +13,7 @@ namespace DataProcessingService_Task1Radency_.Classes.Models
         public List<Payer> Payers { get; set; }
         public double Total { get; set; } = 0;
 
-        public Service(string name, List<Payer> payers) 
+        public Service(string name, List<Payer> payers)
         {
             Name = name;
             Payers = payers;

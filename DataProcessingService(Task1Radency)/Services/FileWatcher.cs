@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace DataProcessingService_Task1Radency_.Classes
+namespace DataProcessingService_Task1Radency_.Services
 {
     internal class FileWatcher
     {
@@ -53,31 +53,26 @@ namespace DataProcessingService_Task1Radency_.Classes
             }
         }
 
-
         // Метод, який відслідковує створення нових файлів
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
-            //////
             string value = $"Created: {e.FullPath}";
             Console.WriteLine(value);
-            /////
 
             string typeFile = e.FullPath.Substring(e.FullPath.LastIndexOf("."), 4);
 
             if (typeFile == ".txt")
             {
-                TXTReader txtReader = new TXTReader();
+                FileReader txtReader = new FileReader();
                 txtReader.ReadFile(e.FullPath);
             }
             if (typeFile == ".csv")
             {
-                CSVReader csvReader = new CSVReader();
-                csvReader.ReadFile(e.FullPath);
+                FileReader csvReader = new FileReader();
+                csvReader.ReadFile(e.FullPath, 2);
             }
 
             MetaFileData.AddParsed_files();
         }
-
-
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataProcessingService_Task1Radency_.Classes.Models
+namespace DataProcessingService_Task1Radency_.Models
 {
     //Клас платника, який призначений для проботи з json
     internal class Payer

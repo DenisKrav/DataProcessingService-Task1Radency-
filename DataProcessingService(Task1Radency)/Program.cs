@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Collections.Specialized;
 using System.Xml;
-using DataProcessingService_Task1Radency_.Classes;
+using DataProcessingService_Task1Radency_.Services;
 
 namespace DataProcessingService_Task1Radency_
 {
